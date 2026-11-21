@@ -1,0 +1,690 @@
+/* =====================================================================
+   bakes & bites homepage: styles.css
+   This file controls how everything LOOKS.
+
+   How CSS reads a rule:
+     .card { padding: 22px; }
+     selector { property: value; }
+   The selector picks which elements the rule applies to:
+     h1       = every <h1>
+     .card    = every element with class="card"
+     .card h3 = every <h3> that sits INSIDE a .card
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   1. DESIGN TOKENS (CSS variables)
+   :root is the whole page, so variables set here work everywhere.
+   You create one with --name and use it with var(--name).
+   Why bother? Change --cocoa once here and every outline, text colour
+   and button that uses it updates. No hunting for hex codes.
+   --------------------------------------------------------------------- */
+:root {
+  /* colour */
+  --paper: #faf5e9;       /* page background */
+  --cream: #f0efdb;       /* cards and panels */
+  --pink: #f5cbd7;        /* shapes only, never text */
+  --cocoa: #442f2a;       /* the only text colour, and every outline */
+  --caramel: #c98a3c;
+  --caramel-ink: #94611f; /* small labels on paper or cream only */
+  --matcha: #7e8f5b;
+
+  /* type: a list of fonts. If the first can't load, the browser tries the next. */
+  --font-display: "Fredoka", "Trebuchet MS", sans-serif;
+  --font-text: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Courier Prime", ui-monospace, monospace;
+
+  /* spacing: every gap and padding on the page comes from this list */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 22px;
+  --space-5: 34px;
+  --space-6: 44px;
+  --space-7: 56px;
+
+  /* shape */
+  --radius-sm: 10px;
+  --radius-md: 20px;
+  --radius-pill: 999px;   /* a huge radius always gives a full pill shape */
+  --stroke: 2px solid var(--cocoa);   /* a variable can hold a whole value */
+
+  /* The stripes are a gradient with hard stops: pink from 0 to 16px,
+     cream from 16px to 32px, then it repeats. No image file needed. */
+  --stripes: repeating-linear-gradient(90deg, var(--pink) 0 16px, var(--cream) 16px 32px);
+
+  /* page */
+  --gutter: var(--space-7);   /* space at the left and right edges */
+  --nav-h: 88px;              /* nav height, reused for scrolling offsets */
+
+  /* hero cookie rows */
+  --cookie: 150px;
+  --cookie-gap: 34px;
+}
+
+
+/* ---------------------------------------------------------------------
+   2. BASE STYLES
+   Sensible defaults for plain tags, before any classes.
+   --------------------------------------------------------------------- */
+
+/* By default, width doesn't include padding and border, so a 200px box with
+   20px padding ends up 240px wide. border-box makes width mean the full
+   width. Almost every modern site starts with this line. */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Smooth scrolling for the #menu / #how links.
+   scroll-padding-top stops the sticky nav from covering the section you jump to. */
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+
+body {
+  margin: 0;   /* browsers add 8px around the page by default; remove it */
+  background: var(--paper);
+  color: var(--cocoa);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 26px;   /* space between lines of text */
+  -webkit-font-smoothing: antialiased;   /* slightly crisper text on Mac */
+}
+
+/* Images never overflow their box, and sit on their own line. */
+img { max-width: 100%; display: block; }
+
+/* Browsers give these tags their own margins. Reset them to 0 so spacing
+   only comes from our own rules and is predictable. */
+h1, h2, h3, p, ul, ol, dl, dd, blockquote { margin: 0; padding: 0; }
+ul, ol { list-style: none; }   /* remove the bullets and numbers */
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 52px;
+  line-height: 56px;
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 40px;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+a { color: var(--cocoa); }
+
+/* The ring you see when you move through the page with the Tab key.
+   :focus-visible shows it for keyboard users but not on mouse clicks.
+   Never remove focus outlines without replacing them. */
+:focus-visible {
+  outline: 3px solid var(--caramel-ink);
+  outline-offset: 3px;
+}
+
+/* The skip link sits above the top of the screen (top: -60px) until it
+   gets keyboard focus, then slides into view. */
+.skip-link {
+  position: absolute;
+  left: var(--space-3);
+  top: -60px;
+  z-index: 20;   /* z-index = stacking order. Higher numbers sit on top. */
+  padding: var(--space-1) var(--space-3);   /* two values: top/bottom, then left/right */
+  background: var(--paper);
+  border: var(--stroke);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-decoration: none;
+}
+.skip-link:focus { top: var(--space-3); }
+
+
+/* ---------------------------------------------------------------------
+   3. SMALL TEXT STYLES
+   --------------------------------------------------------------------- */
+
+/* The small uppercase line above headings. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.14em;   /* em = relative to font size, so it scales */
+  text-transform: uppercase;   /* we type it normally, CSS makes it caps */
+  color: var(--caramel-ink);
+}
+/* A "modifier" class. Used together with .eyebrow to change just the colour. */
+.eyebrow-cocoa { color: var(--cocoa); }
+
+/* Typewriter text for prices and small notes. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 20px;
+}
+
+
+/* ---------------------------------------------------------------------
+   4. BUTTONS
+   One base class (.btn) for the shared look, then small classes that
+   change one thing each. Mix and match: class="btn btn-outline btn-sm".
+   --------------------------------------------------------------------- */
+.btn {
+  display: inline-block;   /* links are "inline" by default and ignore vertical padding; this fixes that */
+  padding: var(--space-2) var(--space-4);
+  border: var(--stroke);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;   /* remove the link underline */
+  white-space: nowrap;     /* never wrap a button label onto two lines */
+  /* transition animates changes smoothly instead of jumping.
+     Here: the lift on hover, and the fill colour change. */
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+/* :hover = mouse is over it. :active = being clicked.
+   translateY(-2px) moves it up 2px without affecting anything around it. */
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn-filled { background: var(--cocoa); color: var(--paper); }
+.btn-outline { background: transparent; color: var(--cocoa); }
+.btn-outline:hover { background: var(--cream); }
+.btn-sm { padding: var(--space-1) var(--space-3); }
+
+/* FLEXBOX: lays children out in a row.
+   gap = space between them. flex-wrap lets them drop to a new line if
+   there's no room. justify-content: center centres them horizontally. */
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+
+
+/* ---------------------------------------------------------------------
+   5. NAV
+   --------------------------------------------------------------------- */
+.site-nav {
+  /* sticky = scrolls normally until it reaches top: 0, then stays there. */
+  position: sticky;
+  top: 0;
+  z-index: 10;   /* keeps it above the content scrolling underneath */
+  height: var(--nav-h);
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;              /* centre vertically */
+  justify-content: space-between;   /* wordmark far left, links far right */
+  background: var(--paper);         /* needs a background or content shows through */
+  border-bottom: var(--stroke);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  text-decoration: none;
+}
+
+.site-nav nav { display: flex; align-items: center; gap: var(--space-5); }
+.nav-links { display: flex; gap: var(--space-5); }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+
+/* ---------------------------------------------------------------------
+   6. SHARED PIECES (used in more than one section)
+   --------------------------------------------------------------------- */
+
+/* The paper box with an outline: hero panel and box deal panel. */
+.panel {
+  background: var(--paper);
+  border: var(--stroke);
+  border-radius: var(--radius-md);
+}
+
+.stripe-band {
+  height: 26px;
+  background: var(--stripes);
+  border-top: var(--stroke);
+  border-bottom: var(--stroke);
+}
+
+/* The circle that holds a cookie photo. */
+.well {
+  aspect-ratio: 1;       /* height always equals width, so it stays a circle */
+  border-radius: 50%;    /* 50% radius on a square = circle */
+  background: var(--paper);
+  border: var(--stroke);
+  padding: var(--space-3);
+  overflow: hidden;      /* clip anything poking out of the circle */
+}
+/* object-fit: contain fits the whole cookie inside without stretching it. */
+.well img { width: 100%; height: 100%; object-fit: contain; }
+
+/* The wobbly sticker. A border-radius with 8 different values (before and
+   after the slash) gives an uneven blob instead of a neat pill. */
+.sticker {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  background: var(--cream);
+  border: var(--stroke);
+  border-radius: 46% 54% 42% 58% / 58% 44% 56% 42%;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------------------
+   7. HERO
+   Two layers: the moving cookie rows behind, the text panel in front.
+   --------------------------------------------------------------------- */
+.hero {
+  position: relative;   /* lets the absolutely-positioned rows inside be placed relative to the hero */
+  overflow: hidden;     /* hides cookies that drift past the edges */
+
+  /* clamp(MIN, PREFERRED, MAX): fill the screen below the nav (100svh minus
+     the nav), but never shorter than 600px or taller than 812px.
+     svh = "small viewport height", which accounts for phone browser bars. */
+  height: clamp(600px, calc(100svh - var(--nav-h)), 812px);
+
+  /* GRID with place-items: center is the shortest way to centre one thing
+     both horizontally and vertically. */
+  display: grid;
+  place-items: center;
+  padding: var(--space-5) var(--gutter);
+}
+
+/* The box the JS fills. position: absolute takes it out of normal flow,
+   so it sits BEHIND the panel instead of pushing it down.
+   inset is shorthand for top, right, bottom, left. */
+.cookie-rows {
+  position: absolute;
+  inset: var(--space-4) 0 auto -40px;
+  display: flex;
+  flex-direction: column;   /* stack the rows vertically */
+  gap: var(--space-7);
+}
+
+/* One row of cookies. */
+.cookie-row {
+  display: flex;
+  gap: var(--cookie-gap);
+  width: max-content;   /* as wide as all its cookies, even past the screen edge */
+
+  /* THE SEAMLESS LOOP TRICK:
+     The JS puts the 5 flavours in each row three times (15 cookies).
+     This padding makes each third of the row exactly the same width.
+     So sliding the row left by one third (33.3333%) lands on an identical
+     picture, and the animation can restart without a visible jump. */
+  padding-right: var(--cookie-gap);
+
+  /* animation: name, duration, timing, repeat.
+     var(--speed, 46s) uses --speed if the JS set one, otherwise 46s. */
+  animation: drift-left var(--speed, 46s) linear infinite;
+}
+
+/* :nth-child(even) = rows 2 and 4. They start half a cookie to the left
+   (so the rows don't line up in columns) and drift the other way. */
+.cookie-row:nth-child(even) {
+  margin-left: calc((var(--cookie) + var(--cookie-gap)) / -2);
+  animation-name: drift-right;
+}
+
+.cookie-row .well {
+  width: var(--cookie);
+  flex-shrink: 0;   /* don't let flexbox squash the circles */
+  background: var(--cream);
+}
+
+/* The JS adds the class "is-paused" to the hero when it's off screen. */
+.hero.is-paused .cookie-row { animation-play-state: paused; }
+
+/* @keyframes defines an animation by its start (from) and end (to). */
+@keyframes drift-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3333%); }   /* % of the row's own width */
+}
+@keyframes drift-right {
+  from { transform: translateX(-33.3333%); }
+  to   { transform: translateX(0); }
+}
+
+.hero-panel {
+  position: relative;   /* puts it on a layer above the absolute cookie rows */
+  width: min(740px, 100%);   /* 740px, or the full width if the screen is smaller */
+  padding: var(--space-6) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+
+/* ---------------------------------------------------------------------
+   8. SECTIONS (menu, how to order, reviews share these)
+   --------------------------------------------------------------------- */
+.section {
+  padding: var(--space-7) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.section-cream {
+  background: var(--cream);
+  border-top: var(--stroke);
+  border-bottom: var(--stroke);
+}
+
+/* Heading on the left, optional note on the right, bottoms aligned. */
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+.section-head .eyebrow { margin-bottom: var(--space-1); }
+
+
+/* ---------------------------------------------------------------------
+   9. FLAVOUR CARDS
+   --------------------------------------------------------------------- */
+
+/* GRID: five equal columns.
+   1fr = one share of the free space. minmax(0, 1fr) stops a long word
+   from making one column wider than the others. */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  background: var(--cream);
+  border: var(--stroke);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: transform 0.14s ease;
+}
+/* Lift and tilt slightly, like picking a cookie up off the counter. */
+.card:hover { transform: translateY(-2px) rotate(-0.6deg); }
+.card .well { margin-bottom: 4px; }
+
+/* min-height keeps a one-line name as tall as a two-line one, so the
+   descriptions start on the same line across a row. */
+.card h3 { min-height: 48px; }
+
+.card .btn { align-self: flex-start; }
+
+/* Price rows.
+   margin-top: auto pushes the prices (and the button under them) to the
+   bottom of the card. In a flex column, an "auto" margin eats all the
+   leftover space. Grid rows make every card in a row the same height, so
+   the prices line up across the row however long each description is. */
+.prices {
+  margin-top: auto;
+  min-height: 58px;   /* room for two rows, so a one-row card's divider lines up with a two-row one */
+  border-top: var(--stroke);
+  padding-top: var(--space-2);
+  margin-bottom: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 20px;
+}
+.prices div { display: flex; align-items: center; gap: var(--space-1); }
+
+/* THE DOTTED LEADER (1 pc ........ ₱60)
+   ::after creates an extra invisible element inside each row, with no HTML.
+   content: "" is required or it won't appear.
+   order: 1 / order: 2 rearrange flex items visually: the dots go between
+   the pack size and the price even though ::after comes last in the code.
+   flex-grow: 1 makes the dots stretch to fill the space.
+   The dots themselves are a tiny circular gradient, repeated sideways. */
+.prices div::after {
+  content: "";
+  order: 1;
+  flex-grow: 1;
+  height: 4px;
+  background: radial-gradient(circle, var(--cocoa) 1px, transparent 1.3px) 0 50% / 6px 4px repeat-x;
+}
+.prices dd { order: 2; }
+
+
+/* ---------------------------------------------------------------------
+   10. HOW TO ORDER
+   --------------------------------------------------------------------- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.steps li { display: flex; flex-direction: column; gap: var(--space-2); }
+.steps h3 { margin-top: 4px; }
+
+.step-num {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;   /* centres the number in the circle */
+  border-radius: 50%;
+  background: var(--pink);
+  border: var(--stroke);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+
+/* ---------------------------------------------------------------------
+   11. BOX DEAL
+   The section is position: relative, so everything inside with
+   position: absolute is placed using its edges as reference points.
+   --------------------------------------------------------------------- */
+.box-deal {
+  position: relative;
+  overflow: hidden;   /* safety net: decorations never cause sideways scrolling */
+  padding: 104px var(--gutter);
+  display: grid;
+  place-items: center;
+}
+
+/* inset: 60px 0 = 60px from the top and bottom, 0 from the sides. */
+.box-band {
+  position: absolute;
+  inset: 60px 0;
+  background: var(--stripes);
+  border-top: var(--stroke);
+  border-bottom: var(--stroke);
+}
+
+.box-cookie {
+  position: absolute;
+  width: 240px;
+  padding: var(--space-4);
+}
+/* Placed from the CENTRE of the section (50%), not from the screen edges.
+   The panel is 560px wide, so it covers 280px either side of the centre.
+   Each cookie's inner edge sits 340px from the centre, leaving a 60px gap
+   on every screen size. If they were placed from the edges instead, they
+   would slide into the panel on narrower laptops. */
+.box-cookie-left { left: calc(50% - 580px); top: 130px; }
+.box-cookie-right { right: calc(50% - 580px); top: 150px; }
+.box-sticker { position: absolute; right: calc(50% - 470px); top: 110px; transform: rotate(7deg); }
+
+.box-panel {
+  position: relative;   /* sits above the absolute stripes */
+  width: min(560px, 100%);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+.box-panel .btn { margin-top: var(--space-1); }
+
+
+/* ---------------------------------------------------------------------
+   12. REVIEWS
+   --------------------------------------------------------------------- */
+.reviews { border-top: var(--stroke); }
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.review {
+  height: 100%;   /* all three cards match the tallest one */
+  margin: 0;      /* <figure> has a default margin; remove it */
+  padding: var(--space-5);
+  background: var(--cream);
+  border: var(--stroke);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* The SVG draws closing quotes (99). Rotating 180° turns them into
+   opening quotes (66). SVG shapes use fill and stroke, not background and border. */
+.quote-mark { transform: rotate(180deg); }
+.quote-mark path { fill: var(--pink); stroke: var(--cocoa); stroke-width: 7; stroke-linejoin: round; }
+
+.review blockquote p {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.review figcaption {
+  margin-top: auto;   /* pushes the caption to the bottom, same trick as the card button */
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+
+/* ---------------------------------------------------------------------
+   13. ORDER CTA
+   --------------------------------------------------------------------- */
+.order-cta {
+  padding: var(--space-7) var(--gutter);
+  background: var(--pink);
+  border-top: var(--stroke);
+  border-bottom: var(--stroke);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-7);
+}
+/* > means "direct child only", not any element deeper inside. */
+.order-cta > div { max-width: 640px; display: flex; flex-direction: column; gap: var(--space-2); }
+
+
+/* ---------------------------------------------------------------------
+   14. FOOTER
+   --------------------------------------------------------------------- */
+.site-footer {
+  padding: var(--space-6) var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+.site-footer .wordmark { margin-bottom: var(--space-1); }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+
+/* ---------------------------------------------------------------------
+   15. RESPONSIVE (smaller screens)
+   @media (max-width: 900px) means "only when the screen is 900px wide or
+   less". Rules inside override the ones above, because they come later
+   in the file. That's why this section is at the bottom.
+   --------------------------------------------------------------------- */
+
+/* Small laptops and big tablets */
+@media (max-width: 1180px) {
+  .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .box-cookie, .box-sticker { display: none; }   /* not enough room beside the panel */
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  /* Changing a variable here changes every rule that uses it. */
+  :root { --gutter: var(--space-5); }
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .review-grid { grid-template-columns: minmax(0, 1fr); }
+  .order-cta { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  :root {
+    --gutter: var(--space-3);
+    --nav-h: 72px;
+    --cookie: 104px;   /* smaller cookies in the hero rows */
+    --cookie-gap: 22px;
+  }
+  .nav-links { display: none; }   /* keep only the Instagram button */
+  h1 { font-size: 44px; line-height: 48px; }
+  h1 br { display: none; }        /* let the headline wrap naturally */
+  .hero { height: auto; min-height: 640px; padding: var(--space-6) var(--gutter); }
+  .hero-panel { padding: var(--space-5) var(--space-4); }
+  .card-grid { grid-template-columns: minmax(0, 1fr); }
+
+  /* On phones each card turns sideways: photo on the left, details on
+     the right. Grid with two columns: 96px for the photo, the rest for text. */
+  .card {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    column-gap: var(--space-3);
+    row-gap: var(--space-1);
+    align-items: start;
+  }
+  .card > * { grid-column: 2; }   /* everything goes in the right column... */
+  .card .well { grid-column: 1; grid-row: 1 / span 3; padding: var(--space-1); margin: 0; }   /* ...except the photo */
+  .card .btn { justify-self: start; }   /* don't stretch the button */
+  .card h3 { min-height: 0; }
+  .card:hover { transform: none; }   /* no hover on touch screens */
+
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .box-deal { padding: 88px var(--gutter); }
+  .box-band { inset: 44px 0; }
+  .box-panel { padding: var(--space-5) var(--space-4); }
+  .site-footer { flex-direction: column; }
+}
+
+/* Some people turn on "reduce motion" in their phone or computer settings
+   because animation makes them dizzy. This respects that. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cookie-row { animation: none; }
+  .btn, .card { transition: none; }
+  .btn:hover, .card:hover { transform: none; }
+}

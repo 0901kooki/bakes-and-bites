@@ -1,0 +1,405 @@
+<!doctype html>
+<!--
+  bakes & bites homepage: index.html
+  This file is the CONTENT and STRUCTURE of the page. It says what things are
+  (a heading, a list, a button) but not how they look. All the looks live in
+  css/styles.css, and the moving cookie rows live in js/main.js.
+-->
+<html lang="en">
+<!-- lang="en" tells screen readers and Google which language to read the page in. -->
+
+<head>
+  <!-- Everything in <head> is setup. None of it shows on the page itself. -->
+
+  <!-- Lets the page use any character, including ₱ and emoji. -->
+  <meta charset="utf-8">
+
+  <!-- Without this line, phones pretend to be a 980px-wide desktop and shrink
+       the whole page. With it, the page is laid out at the phone's real width. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Shows in the browser tab and as the blue link in Google results.
+       &amp; is how you write "&" safely inside HTML. -->
+  <title>bakes &amp; bites · small batch cookies, baked to order</title>
+
+  <!-- The grey summary text under the link in Google results. -->
+  <meta name="description" content="Small batch cookies and treats, baked to order in a home kitchen in Pampanga. Order through Instagram.">
+
+  <!-- "preconnect" opens the connection to Google Fonts early, so the fonts
+       arrive a little faster. Optional, but cheap. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Loads our three fonts and only the weights we use.
+       Fewer weights = smaller download. display=swap shows a fallback font
+       while the real one loads, so text is never invisible. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Figtree:wght@400;600&family=Fredoka:wght@400;500;600&display=swap">
+
+  <!-- Our own stylesheet. The path is relative to this file. -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- "defer" means: download the script now, but run it only after the HTML
+       has been read. That way the script can find elements on the page. -->
+  <script src="js/main.js" defer></script>
+</head>
+
+<body>
+
+  <!-- A link only keyboard users see. Pressing Tab once shows it, and Enter
+       jumps past the nav straight to the menu. The CSS hides it off screen
+       until it gets focus. -->
+  <a class="skip-link" href="#menu">Skip to the menu</a>
+
+
+  <!-- ================= NAV ================= -->
+  <!-- <header> and <nav> are "semantic" tags. They look like plain <div>s,
+       but they tell screen readers "this is the site header" and
+       "this is navigation", so people can jump between them. -->
+  <header class="site-nav">
+    <!-- href="#top" scrolls to the element with id="top" (the <main> below). -->
+    <a class="wordmark" href="#top">bakes &amp; bites</a>
+
+    <!-- aria-label names this nav for screen readers. -->
+    <nav aria-label="Main">
+      <!-- Menus are lists of links, so we use <ul> (unordered list) and <li>. -->
+      <ul class="nav-links">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#how">How to order</a></li>
+      </ul>
+      <!-- One element can have several classes, separated by spaces.
+           btn = basic button look, btn-outline = no fill, btn-sm = smaller. -->
+      <a class="btn btn-outline btn-sm" href="https://www.instagram.com/bakesnbitesbymik/">Order on Instagram</a>
+    </nav>
+  </header>
+
+
+  <!-- <main> holds the page's main content. There should be only one per page. -->
+  <main id="top">
+
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <!-- An empty box. js/main.js fills it with the moving cookie rows.
+           aria-hidden="true" tells screen readers to skip it, since it's only decoration.
+           data-cookie-rows is a custom attribute. It's how the JS finds this box. -->
+      <div class="cookie-rows" aria-hidden="true" data-cookie-rows></div>
+
+      <!-- "panel" gives the paper box with an outline.
+           "hero-panel" adds the hero-specific size and spacing. -->
+      <div class="panel hero-panel">
+        <p class="eyebrow">Small batch · baked in Pampanga</p>
+
+        <!-- Only one <h1> per page: it's the page's main title.
+             <br> forces a line break. On phones the CSS hides it. -->
+        <h1>Cookies baked the day<br> they reach you.</h1>
+
+        <p>Five cookie flavours, plus brownies, crackles and a scoopable cookie, all baked to order in a home kitchen.</p>
+
+        <div class="btn-row">
+          <!-- These are links styled as buttons, because they take you somewhere.
+               Use a real <button> only for actions on the page (like submitting a form). -->
+          <a class="btn btn-filled" href="#how">Order now</a>
+          <a class="btn btn-outline" href="#menu">See the menu</a>
+        </div>
+
+        <p class="mono">Cookies from ₱60 a piece · boxes of 5</p>
+      </div>
+    </section>
+
+
+    <!-- A purely decorative stripe. No content, so aria-hidden. -->
+    <div class="stripe-band" aria-hidden="true"></div>
+
+
+    <!-- ================= MENU ================= -->
+    <!-- id="menu" is the target of the "Menu" links (href="#menu").
+         aria-labelledby points to the heading's id, so the section gets
+         that heading as its name for screen readers. -->
+    <section class="section" id="menu" aria-labelledby="menu-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">The menu</p>
+          <h2 id="menu-title">Five cookies, baked to order.</h2>
+        </div>
+        <p class="mono">By the piece or a box of 5</p>
+      </div>
+
+      <!-- The five cards are a list, so <ul>. The CSS turns it into a grid.
+           TIP FOR RETYPING: type the first card carefully, then copy and paste
+           it and change only the image, name, text and prices. -->
+      <ul class="card-grid">
+
+        <li class="card">
+          <!-- "well" is the circle the photo sits in.
+               alt describes the image for screen readers and if it fails to load.
+               width/height let the browser save space before the image arrives,
+               so the page doesn't jump. loading="lazy" waits to download it
+               until you scroll near it. -->
+          <div class="well"><img src="images/chocchip.webp" alt="Belgian chocolate chip cookie" width="900" height="900" loading="lazy"></div>
+
+          <h3>belgian chocolate chip</h3>
+          <p class="card-desc">Loaded with Belgian chocolate chips.</p>
+
+          <!-- <dl> is a "description list": pairs of a term (<dt>) and its
+               value (<dd>). Pack size and price are exactly that kind of pair.
+               Each pair is wrapped in a <div> so the CSS can lay out one row at a time. -->
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱60</dd></div>
+            <div><dt>Box of 5</dt><dd>₱280</dd></div>
+          </dl>
+
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/biscoff.webp" alt="Biscoff cookie" width="900" height="900" loading="lazy"></div>
+          <h3>biscoff</h3>
+          <p class="card-desc">A whole Biscoff biscuit on top, with white chocolate chunks.</p>
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱70</dd></div>
+            <div><dt>Box of 5</dt><dd>₱330</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/pistachio.webp" alt="Pistachio chocolate chip cookie" width="900" height="900" loading="lazy"></div>
+          <h3>pistachio chocolate chip</h3>
+          <p class="card-desc">Chocolate chip dough with a pistachio cream centre and chopped pistachios.</p>
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱70</dd></div>
+            <div><dt>Box of 5</dt><dd>₱330</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/matcha.webp" alt="White chocolate matcha cookie" width="900" height="900" loading="lazy"></div>
+          <h3>white chocolate matcha</h3>
+          <p class="card-desc">Matcha dough with a white chocolate centre.</p>
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱60</dd></div>
+            <div><dt>Box of 5</dt><dd>₱280</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <li class="card">
+          <div class="well"><img src="images/redvelvet.webp" alt="Red velvet cookie with cream cheese" width="900" height="900" loading="lazy"></div>
+          <h3>red velvet with cream cheese</h3>
+          <p class="card-desc">Red velvet dough with a cream cheese centre and white chocolate chunks.</p>
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱65</dd></div>
+            <div><dt>Box of 5</dt><dd>₱305</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+      </ul>
+    </section>
+
+
+    <!-- ================= MORE TREATS ================= -->
+    <!-- Same card as the cookies, reused. Writing a component once and
+         reusing it is the whole point of classes. Only the prices differ:
+         the scoopable cookie and crackles have a single price row. -->
+    <section class="section" id="treats" aria-labelledby="treats-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">More treats</p>
+          <h2 id="treats-title">Brownies, crackles and a cookie you eat with a spoon.</h2>
+        </div>
+      </div>
+
+      <ul class="card-grid">
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/brownie.webp" alt="Nutty fudge brownie" width="900" height="900" loading="lazy"></div>
+          <h3>nutty fudge brownie</h3>
+          <p class="card-desc">Fudgy chocolate brownie, topped with chopped nuts.</p>
+          <dl class="prices">
+            <div><dt>1 pc</dt><dd>₱35</dd></div>
+            <div><dt>Box of 6</dt><dd>₱180</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/scoopable.webp" alt="Nutella scoopable cookie in a paper cup" width="900" height="900" loading="lazy"></div>
+          <h3>nutella scoopable cookie</h3>
+          <p class="card-desc">A soft Nutella cookie baked in its own cup. Eat it with a spoon.</p>
+          <dl class="prices">
+            <div><dt>1 cup</dt><dd>₱135</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+        <!-- TODO: check this description with the baker -->
+        <li class="card">
+          <div class="well"><img src="images/crackle.webp" alt="Chocolate crackle cookie" width="900" height="900" loading="lazy"></div>
+          <h3>crackle cookies</h3>
+          <p class="card-desc">Chocolate crackle cookies rolled in powdered sugar.</p>
+          <dl class="prices">
+            <div><dt>10 pcs</dt><dd>₱100</dd></div>
+          </dl>
+          <a class="btn btn-outline btn-sm" href="#how">Order this</a>
+        </li>
+
+      </ul>
+    </section>
+
+
+    <!-- ================= HOW TO ORDER ================= -->
+    <section class="section section-cream" id="how" aria-labelledby="how-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">How ordering works</p>
+          <h2 id="how-title">Four steps, all through Instagram.</h2>
+        </div>
+      </div>
+
+      <!-- Steps happen in order, so this is an <ol> (ordered list), not <ul>. -->
+      <ol class="steps">
+        <li>
+          <!-- The number is drawn as a pink circle. aria-hidden stops screen
+               readers saying "1" twice, because an <ol> already numbers its items. -->
+          <span class="step-num" aria-hidden="true">1</span>
+          <h3>Pick your cookies</h3>
+          <p>By the piece, a box of 5, or the all flavours box.</p>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">2</span>
+          <h3>Add a treat</h3>
+          <p>Brownies, crackles or a scoopable cookie, if you like.</p>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">3</span>
+          <h3>Send us a DM by Monday</h3>
+          <p>Your box and your flavours. Orders close every Monday.</p>
+        </li>
+        <li>
+          <span class="step-num" aria-hidden="true">4</span>
+          <h3>Delivered on Saturday</h3>
+          <p>Baked fresh, delivered every Saturday.</p>
+        </li>
+      </ol>
+
+      <p class="mono">Orders close Monday · delivered Saturday</p>
+    </section>
+
+
+    <!-- ================= BOX DEAL ================= -->
+    <!-- This section is built in layers. The stripes, the two cookies and the
+         sticker are positioned "absolutely" (placed freely), and the panel
+         sits on top in the middle. See .box-deal in the CSS. -->
+    <section class="box-deal" aria-labelledby="box-title">
+      <div class="box-band" aria-hidden="true"></div>
+
+      <!-- alt="" (empty) means "decorative, skip me". Different from leaving alt out. -->
+      <div class="box-cookie box-cookie-left well" aria-hidden="true"><img src="images/redvelvet.webp" alt="" loading="lazy"></div>
+      <div class="box-cookie box-cookie-right well" aria-hidden="true"><img src="images/chocchip.webp" alt="" loading="lazy"></div>
+      <span class="sticker box-sticker" aria-hidden="true">one of each</span>
+
+      <div class="panel box-panel">
+        <p class="eyebrow">The box deal</p>
+        <h2 id="box-title">the all flavours box</h2>
+        <p>One of each cookie flavour, five pieces in one box. The easiest way to try the whole menu.</p>
+        <p class="mono">5 pcs · ₱300</p>
+        <a class="btn btn-filled" href="#how">Order the box</a>
+      </div>
+    </section>
+
+
+    <!-- ================= REVIEWS ================= -->
+    <!-- Customers' own words from Messenger, quoted exactly as written. -->
+    <section class="section reviews" aria-labelledby="reviews-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Reviews</p>
+          <h2 id="reviews-title">Straight from the DMs.</h2>
+        </div>
+      </div>
+
+      <ul class="review-grid">
+        <li>
+          <!-- <figure> + <figcaption> pair a piece of content with its caption.
+               <blockquote> marks text quoted from someone else. -->
+          <figure class="review">
+            <!-- The pink quote marks, drawn with SVG.
+                 viewBox sets up a 200 x 150 drawing area; width/height set the
+                 size on screen, so the drawing scales to fit.
+                 Each <path> is one comma shape. "d" is the drawing instructions:
+                 M = move to, A = arc, C = curve, Z = close the shape.
+                 RETYPING TIP: nobody types SVG paths by hand. Copy and paste them. -->
+            <svg class="quote-mark" width="44" height="33" viewBox="0 0 200 150" aria-hidden="true">
+              <path d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+              <!-- Same shape again, moved 104 units to the right. -->
+              <path transform="translate(104 0)" d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+            </svg>
+            <blockquote><p>10/10 red velvet cookie ate sobrang kuhang kuha mo to ate</p></blockquote>
+            <figcaption>From a customer · On the red velvet</figcaption>
+          </figure>
+        </li>
+
+        <li>
+          <figure class="review">
+            <svg class="quote-mark" width="44" height="33" viewBox="0 0 200 150" aria-hidden="true">
+              <path d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+              <path transform="translate(104 0)" d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+            </svg>
+            <blockquote><p>…saktoo lang ung chocolate nung cookiee!! Hindi man gaaanoo katamis lahaatt! LIKE I LOVE ITT</p></blockquote>
+            <figcaption>From a customer · On the chocolate</figcaption>
+          </figure>
+        </li>
+
+        <li>
+          <figure class="review">
+            <svg class="quote-mark" width="44" height="33" viewBox="0 0 200 150" aria-hidden="true">
+              <path d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+              <path transform="translate(104 0)" d="M45 5 A45 45 0 0 1 89 58 C86 98 64 128 28 142 C48 122 56 108 58 94 A45 45 0 0 1 45 5 Z"></path>
+            </svg>
+            <blockquote><p>10/10 crinkles perfect lasa niya and nagmemelt sa bibig</p></blockquote>
+            <figcaption>From a customer · On the crackles</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </section>
+
+
+    <!-- ================= ORDER CTA ================= -->
+    <!-- CTA = "call to action": the section that asks people to order. -->
+    <section class="order-cta" aria-labelledby="cta-title">
+      <div>
+        <h2 id="cta-title">Orders open every week.</h2>
+        <p>DM us on Instagram at @bakesnbitesbymik with your order by Monday. Everything is baked fresh and delivered on Saturday.</p>
+      </div>
+      <a class="btn btn-filled" href="https://www.instagram.com/bakesnbitesbymik/">Order on Instagram</a>
+    </section>
+
+  </main>
+
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div>
+      <p class="wordmark">bakes &amp; bites</p>
+      <!-- Two classes: eyebrow gives the small caps style,
+           eyebrow-cocoa overrides just the colour. -->
+      <p class="eyebrow eyebrow-cocoa">Small batch · baked in Pampanga</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#treats">More treats</a></li>
+      <li><a href="#how">How to order</a></li>
+      <li><a href="https://www.instagram.com/bakesnbitesbymik/">@bakesnbitesbymik</a></li>
+    </ul>
+    <!-- The JS replaces "2026" with the current year, so it never goes stale. -->
+    <p class="mono">© <span data-year>2026</span> bakes &amp; bites</p>
+  </footer>
+
+</body>
+</html>
